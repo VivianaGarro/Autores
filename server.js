@@ -1,41 +1,29 @@
-/*
-server.js
-terminal: npm init -y (crea el .json)
-package.json hacer el node => nodemon
-terminal: npm install nodemon -g (instalar nodemon a nivel global) solo una vez se hace.
-terminal: npm install express mongoose cors
-crear carpeta server => config, controllers, models, routes.
---------------------
-terminal 2 npx create-react-app client
-happy hacking
-terminal 2 cd client
-npm install axios react-router-dom
-
-*/
-
-
-
-
-
-
 const express = require("express");
-const app = express();
-
 const cors = require("cors");
+const app = express();
+const cookieParser = require("cookie-parser");
 
-app.use(express.json(), express.urlencoded({extended:true}));
+//Para usar Json y obtener datos de URL
+app.use( express.json(), express.urlencoded({ extended: true }) );
 
-app.use(
-    cors({
-        //url de react
-        origin: "http://localhost:3000"
+//Para usar cookies
+app.use(cookieParser());
+
+//Permitir accesar desde un origen distinto
+app.use (
+    cors( {
+        origin: "http://localhost:3000",
+        //Credenciales
+        credentials: true
     })
 )
 
-//iniciar la BD
+//Inicilizamos BD
 require("./server/config/mongoose.config");
 
-//importar rutas
+//Importamos rutas
 const misRutas = require("./server/routes/autor.routes");
 misRutas(app);
-app.listen(8000, () => console.log ("Servidor listo!"));
+
+//Ejecutamos server
+app.listen(8000, () => console.log("Sevidor listo!"));
